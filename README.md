@@ -101,7 +101,7 @@ TLDR:
 - Pick one word from each cluster to make a list
 - Choose the N most dissimilar words from that list
 
-# What to you mean by "best" words?
+# What do you mean by "best" words?
 
 "Best" is subjective, but here is what the algorithm does. Given a cluster, it goes down this list of criteria:
 
@@ -116,6 +116,6 @@ It is built from multiple wordlists, the primary ones coming from:
 - [Mythic GME 2e by Tana Pigeon](https://wordmillgames.com/)
 - [Ironsworn by Shawn Tomkin](https://www.ironswornrpg.com/)
 
-# Why is your code so bad?
+# What is up with this code?
 
 I pieced it together with the help of ChatGPT. It may not be the most efficient, but it is pretty well commented and broken out into small functions, so hopefully its easy to read/understand.
