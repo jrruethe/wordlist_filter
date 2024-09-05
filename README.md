@@ -8,18 +8,20 @@ This tool cannot create wordlists from nothing, it can only take large wordlists
 
 # How to use?
 
+Copy `.env.example` to `.env` and fill out the values. Then `source ./.env`
+
 ## Python
 
-1) Download the [model](https://dl.fbaipublicfiles.com/fasttext/vectors-english/crawl-300d-2M-subword.zip) file, unzip it, put it inside the `/model` directory
-2) `pip install -r requirements.txt`
-3) `python3 -c "import nltk; nltk.download('wordnet')"`
-4) `./filter.py -f example.txt -n 10`
+1) `python3 -m venv venv`
+2) `source ./venv/bin/activate`
+3) `pip install -r requirements.txt`
+4) `python3 -c "import nltk; nltk.download('wordnet')"`
+5) `./filter.py -f example.txt -n 10`
 
 ## Docker
 
-1) Download the [model](https://dl.fbaipublicfiles.com/fasttext/vectors-english/crawl-300d-2M-subword.zip) file, unzip it, put it inside the `/model` directory
-2) `docker build . -t filter`
-3) `docker run -i --rm filter -f - -n 10 < example.txt`
+1) `docker build . -t filter`
+2) `docker run -i --rm -e OPENAI_BASE_URL="${OPENAI_BASE_URL}" -e OPENAI_API_KEY="${OPENAI_API_KEY}" -e OPENAI_MODEL="${OPENAI_MODEL}" filter -f - -n 10 -p VERB < example.txt`
 
 ## Examples
 
@@ -28,15 +30,15 @@ Get the 10 "best" verbs from the list:
 ```
 ./filter.py -f example.txt -n 10 -p VERB
 
-Average
-Betray
-Calm
-Control
+Ambush
+Break
+Communicate
 Create
-Depart
-Empty
 Fancy
-Release
+Focus
+Protect
+Refuse
+Transform
 Travel
 ```
 
@@ -81,11 +83,7 @@ Then it reorders the words by frequency, while maintaining the input order for w
 
 Next, it optionally filters on the specified part of speech, leaving only nouns/verbs/adjectives in the list.
 
-Then, it uses the `hdbscan` algorithm to cluster words together based on their vector representation.
-
-> Word2Vec is a popular algorithm for word embedding, which represents words as dense vectors in a high-dimensional space based on their contextual usage patterns. It captures semantic and syntactic relationships between words, enabling mathematical operations on the word vectors, such as word similarity and analogy.
-
-(This code uses the FastText model for converting words to vectors, because it can handle words outside of the training set)
+Then, it uses the `hdbscan` algorithm to cluster words together based on their vector representation (obtained using the OpenAI API Embeddings).
 
 `hdbscan` will group similar words together, such as `[dog, canine, puppy]`, into clusters.
 

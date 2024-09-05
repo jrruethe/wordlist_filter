@@ -1,5 +1,5 @@
-nltk 
-fasttext 
-hdbscan 
-numpy 
+nltk
+hdbscan
+numpy
 scipy
+openai

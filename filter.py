@@ -12,10 +12,13 @@ import nltk
 import numpy as np
 import hdbscan
 import sklearn
-import fasttext
+
 from nltk.corpus import wordnet
 from scipy.spatial.distance import cosine
 from sklearn.metrics import pairwise_distances
+from openai import OpenAI
+
+client = OpenAI(base_url=os.environ["OPENAI_BASE_URL"], api_key=os.environ["OPENAI_API_KEY"])
 
 # Clean an input list of words
 def clean_input(words):
@@ -120,8 +123,14 @@ def part_of_speech(wordlist, pos):
 def get_word_vectors(words):
   word_vectors = []
   for word in words:
-    word_vectors.append((word, fasttext_model[word]))
+
+    # Get the embedding
+    response = client.embeddings.create(input=word, model=os.environ["OPENAI_MODEL"])
+    embedding = response.data[0].embedding
+
+    word_vectors.append((word, embedding))
   return word_vectors
+
 
 # Given a list of wordvector pairs [(word, vector)],
 # returns a list of clusters of word vector pairs, and a list of remainders
@@ -428,9 +437,6 @@ if __name__ == '__main__':
   # Filter the wordlist down to the part of speech
   if args.pos:
     word_list = part_of_speech(word_list, pos=args.pos)
-
-  # Load the FastText model from the /model directory
-  fasttext_model = fasttext.load_model(os.path.dirname(os.path.realpath(__file__)) + "/model/crawl-300d-2M-subword.bin")
 
   # Cluster the words
   clusters, remainders = cluster_words(word_list)
