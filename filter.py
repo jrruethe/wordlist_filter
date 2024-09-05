@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import argparse
-import sys
 import re
 import os
 
@@ -407,6 +405,8 @@ def clean_output(words):
 
 
 if __name__ == '__main__':
+  import argparse
+  import sys
 
   # Set up command line argument parser
   parser = argparse.ArgumentParser(description='Given a list of words, return the best subset of words')
